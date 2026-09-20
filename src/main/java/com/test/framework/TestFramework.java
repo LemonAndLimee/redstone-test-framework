@@ -2,6 +2,7 @@ package com.test.framework;
 
 import net.fabricmc.api.ModInitializer;
 
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.resources.ResourceLocation;
 
 import org.slf4j.Logger;
@@ -17,11 +18,14 @@ public class TestFramework implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-
-		LOGGER.info("Hello Fabric world!");
+		CommandRegistrationCallback.EVENT.register(
+			(
+				(dispatcher, registryAccess, environment) ->
+				{
+					ModCommands.register(dispatcher);
+				}
+			)
+		);
 	}
 
 	public static ResourceLocation id(String path) {

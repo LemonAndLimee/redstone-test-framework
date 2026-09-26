@@ -33,6 +33,8 @@ public class OriginPosition
      */
     public static int executeGetOriginCommand(CommandContext<CommandSourceStack> ctx)
     {
+        TestFramework.LOGGER.debug("Called /testf origin get");
+
         String posString = origin.toShortString();
 
         CommandSourceStack source = ctx.getSource();
@@ -53,12 +55,15 @@ public class OriginPosition
      */
     public static int executeSetOriginCommand(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException
     {
+        TestFramework.LOGGER.debug("Called /testf origin set");
+
         CommandSourceStack source = ctx.getSource();
         ServerPlayer player = source.getPlayerOrException();
 
         BlockPos targetedBlockPos = PlayerRaycastHelper.getTargetedBlock(player);
         if (targetedBlockPos == null)
         {
+            TestFramework.LOGGER.warn("Cannot set origin: player not looking at block.");
             source.sendFailure(
                 Component.literal("Cannot set origin position: must be looking at a block.\n").withStyle(ChatFormatting.RED)
             );
@@ -66,9 +71,9 @@ public class OriginPosition
         }
 
         String posString = targetedBlockPos.toShortString();
-        source.sendSuccess(
-            () -> Component.literal("Setting origin to (" + posString + ").\n").withStyle(ChatFormatting.WHITE), false
-        );
+        String logMsg = "Setting origin to (" + posString + ")";
+        source.sendSuccess(() -> Component.literal(logMsg + "\n").withStyle(ChatFormatting.WHITE), false);
+        TestFramework.LOGGER.info(logMsg);
 
         origin = targetedBlockPos;
 
@@ -84,12 +89,15 @@ public class OriginPosition
      */
     public static int executeGetRelativePosCommand(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException
     {
+        TestFramework.LOGGER.debug("Called /testf origin get_relative_pos");
+
         CommandSourceStack source = ctx.getSource();
         ServerPlayer player = source.getPlayerOrException();
 
         BlockPos targetedBlockPos = PlayerRaycastHelper.getTargetedBlock(player);
         if (targetedBlockPos == null)
         {
+            TestFramework.LOGGER.warn("Cannot get relative position: player not looking at block.");
             source.sendFailure(
                 Component.literal("Cannot get relative position: must be looking at a block.\n").withStyle(ChatFormatting.RED)
             );
@@ -99,9 +107,9 @@ public class OriginPosition
         BlockPos relativePos = targetedBlockPos.subtract(origin);
 
         String posString = relativePos.toShortString();
-        source.sendSuccess(
-            () -> Component.literal("Position relative to origin: (" + posString + ").\n").withStyle(ChatFormatting.WHITE), false
-        );
+        String logMsg = "Position relative to origin: (" + posString + ")";
+        source.sendSuccess(() -> Component.literal(logMsg + "\n").withStyle(ChatFormatting.WHITE), false);
+        TestFramework.LOGGER.info(logMsg);
 
         return 1;
     }

@@ -16,6 +16,8 @@ public class HelpCommand
      */
     public static int execute(CommandContext<CommandSourceStack> ctx)
     {
+        TestFramework.LOGGER.debug("Called /testf help");
+
         Component message = Component.empty()
             .append(Component.literal("--- Available commands ---\n").withStyle(ChatFormatting.BOLD))
 
